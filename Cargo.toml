@@ -1,0 +1,3 @@
+[workspace]
+members = ["crates/folder-crdt", "crates/folder-crdt-derive"]
+resolver = "2"
