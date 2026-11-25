@@ -16,6 +16,9 @@
 //! clients leave. A [`Codec`] turns the data into that file's bytes:
 //! [`Json`] in the clear, or [`Sealed`] with the app's own [`Cipher`].
 //!
+//! Where there is no synced folder, a [`RemoteStore`] keeps the file on a
+//! server instead, [`webdav`] (feature `webdav`) or any other [`Remote`].
+//!
 //! [`vault`] holds Vault's own records and file layout, built on these
 //! types. Nothing touches disk except [`fs`] and [`FolderStore`].
 
@@ -31,10 +34,13 @@ pub mod fs;
 mod hlc;
 mod merge;
 mod record_set;
+pub mod remote;
 pub mod sequence;
 mod store;
 mod unknown;
 pub mod vault;
+#[cfg(feature = "webdav")]
+pub mod webdav;
 
 pub use codec::{Cipher, Codec, Json, KeyMismatch, Sealed, StoreError};
 pub use field::{AddWinsSet, BoundedSet, Counter, DeviceId, Immutable, Lww, LwwHistory, Max, Tag};
@@ -42,6 +48,7 @@ pub use hlc::{Hlc, HlcClock, LEGACY_DEVICE};
 pub use folder_crdt_derive::{Merge, Record};
 pub use merge::{check_laws, merged, Merge};
 pub use record_set::{DeletePolicy, DeleteWins, EditRevives, LastEdit, Record, RecordSet};
+pub use remote::{Expect, Fetched, Put, Remote, RemoteStore};
 pub use store::{FolderStore, Store, SyncOutcome};
 pub use sequence::{ItemId, Position, Sequence};
 pub use unknown::Unknown;
